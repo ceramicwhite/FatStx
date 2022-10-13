@@ -7,19 +7,11 @@ WORKDIR     /fatstx
 COPY        . .
 
 RUN         yarn install && \
-            yarn build
-
-            # Stage 2 - the production environment
-FROM        --platform=${TARGETPLATFORM} node:18-alpine
-
-WORKDIR      /app
-
-COPY        --from=builder /fatstx /app
-
-RUN         yarn global add serve && \
-            rm -r /app/node_modules /app/yarn.lock /app/package.json && \
+            yarn build && \
+            rm -r /fatstx/node_modules /fatstx/yarn.lock /fatstx/package.json && \
+            yarn global add serve && \
             yarn add react-inject-env && \
-            chmod +x /app/entrypoint.sh
+            chmod +x /fatstx/entrypoint.sh
 
 EXPOSE      3000
 
