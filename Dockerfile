@@ -1,4 +1,4 @@
-FROM        --platform=${TARGETPLATFORM} node:18-alpine as builder
+FROM        --platform=${TARGETPLATFORM} node:18-alpine
 
 ARG         NODE_ENV=production
 
