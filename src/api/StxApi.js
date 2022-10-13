@@ -2,6 +2,10 @@ import { Configuration, BlocksApi } from "@stacks/blockchain-api-client";
 // import { callReadOnlyFunction } from '@stacks/transactions';
 // import { StacksMainnet } from '@stacks/network';
 
+import { env } from '../env'
+
+const stacksAPI = env.REACT_APP_STACKS_BLOCKCHAIN_API_URL;
+
 //Process All API Pages
 export default async function processAllXactnWithTransfersApiPages(walletId, year='All') {
 
@@ -85,7 +89,7 @@ export async function getCurrentBlock() {
 export async function isValidWallet(walletId) {
     //Not calling this one because it is far too slow for some reason
     //let baseUrl = "https://stacks-node-api.mainnet.stacks.co/v2/accounts/" + walletId;
-    let baseUrl = 'https://stacks-node-api.mainnet.stacks.co/extended/v1/address/' + walletId + '/balances'
+    let baseUrl = stacksAPI + '/extended/v1/address/' + walletId + '/balances'
     let ret = await processOneApiPage(baseUrl);
     if (ret[0]===200 && ret[1].error === undefined)
     {
@@ -96,7 +100,7 @@ export async function isValidWallet(walletId) {
 }
 
 export async function getBlockTime(blockHeight) {
-    let baseUrl = 'https://stacks-node-api.mainnet.stacks.co/extended/v1/block/by_height/' + blockHeight;
+    let baseUrl = stacksAPI + '/extended/v1/block/by_height/' + blockHeight;
     let ret = await processOneApiPage(baseUrl);
     if (ret[0]===200 && ret[1].burn_block_time_iso !==undefined)
     {
@@ -109,7 +113,7 @@ export async function getBlockTime(blockHeight) {
 //Fully process one 50 xactn call/page from the transactions with transfers API
 async function processOneXactnWithTransfersApiPage(offset, walletId) {
     console.log(Date.now() + " ===Process Api Page,Offset " + offset + "===");
-    let baseUrl = "https://stacks-node-api.mainnet.stacks.co/extended/v1/address/" + walletId + "/transactions_with_transfers?limit=50&unanchored=false&offset="
+    let baseUrl = stacksAPI + "/extended/v1/address/" + walletId + "/transactions_with_transfers?limit=50&unanchored=false&offset="
     //This is just used for some testing error scenarios
     // if (offset===0)
     // {
